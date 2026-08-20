@@ -1,0 +1,92 @@
+{
+  "title": "订单导入与审核",
+  "module": "ORDER_IMPORT",
+  "test_mode": "cross_page",
+  "coverage_level": "standard",
+  "layout": "detailed",
+  "style": "professional",
+  "target_xmind_version": "modern-json",
+  "sheets": [
+    {
+      "title": "导入页",
+      "scenarios": [
+        {
+          "key": "main_flow",
+          "title": "主流程",
+          "cases": [
+            {
+              "id": "TC-ORDER_IMPORT-001",
+              "title": "导入有效订单文件",
+              "preconditions": ["用户已登录并拥有订单导入权限"],
+              "test_data": [
+                {"name": "file", "value": "orders-valid.csv"},
+                {"name": "row_count", "value": 20}
+              ],
+              "steps": [
+                {"action": "打开订单导入页", "expected": "显示文件选择控件和导入按钮"},
+                {"action": "选择有效 CSV 文件", "expected": "显示文件名和 20 条记录"},
+                "点击导入"
+              ],
+              "expected": "导入成功并显示批次号",
+              "priority": "P1",
+              "source": "described",
+              "confidence": "high",
+              "tags": ["smoke", "import"],
+              "notes": "批次号用于后续审核页查询"
+            }
+          ]
+        },
+        {
+          "key": "invalid_input",
+          "title": "无效输入",
+          "cases": [
+            {
+              "id": "TC-ORDER_IMPORT-002",
+              "title": "拒绝不支持的文件类型",
+              "preconditions": ["用户已登录"],
+              "test_data": [{"name": "file", "value": "orders.txt"}],
+              "steps": [
+                {"action": "选择 TXT 文件", "expected": "文件名显示在选择控件中"},
+                {"action": "点击导入", "expected": "保留在导入页并显示格式错误"}
+              ],
+              "expected": "提示仅支持 CSV 或 XLSX 文件，且不创建导入批次",
+              "priority": "P1",
+              "source": "inferred",
+              "confidence": "medium",
+              "assumptions": ["导入接口仅接受 CSV 或 XLSX；不支持类型应在提交前被拦截。"],
+              "tags": ["validation", "negative"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "审核页",
+      "scenarios": [
+        {
+          "key": "state_consistency",
+          "title": "状态与数据一致性",
+          "cases": [
+            {
+              "id": "TC-ORDER_IMPORT-003",
+              "title": "导入批次在审核页保持一致",
+              "preconditions": ["已存在导入批次 ORDER-20260811-001"],
+              "test_data": [{"name": "batch_id", "value": "ORDER-20260811-001"}],
+              "steps": [
+                {"action": "从导入结果进入审核页", "expected": "审核页显示相同批次号"},
+                {"action": "刷新审核页", "expected": "批次号和记录数量不变"}
+              ],
+              "expected": "审核页与导入结果展示相同批次和记录数量",
+              "priority": "P1",
+              "source": "inferred",
+              "confidence": "medium",
+              "assumptions": ["导入结果通过批次号传递到审核页，刷新时服务端数据保持一致。"],
+              "tags": ["cross-page", "consistency"],
+              "notes": "需要在导入完成后立即执行，避免批次被其他用户修改"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

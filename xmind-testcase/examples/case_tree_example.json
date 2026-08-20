@@ -1,0 +1,108 @@
+{
+  "title": "文件上传流程",
+  "module": "UPLOAD",
+  "test_mode": "cross_page",
+  "coverage_level": "standard",
+  "style": "professional",
+  "layout": "detailed",
+  "target_xmind_version": "modern-json",
+  "scenarios": [
+    {
+      "key": "main_flow",
+      "title": "1. 主流程",
+      "cases": [
+        {
+          "title": "上传流程_列表页点击上传按钮_进入上传页_显示空表单",
+          "source": "described",
+          "confidence": "high",
+          "priority": "P1",
+          "steps": ["打开文件列表页", "点击上传按钮"],
+          "expected": "进入上传页并显示空表单"
+        },
+        {
+          "title": "上传流程_上传页选择文件_点击下一步_进入确认页",
+          "source": "described",
+          "confidence": "high",
+          "priority": "P1",
+          "steps": ["在上传页选择一个有效文件", "点击下一步按钮"],
+          "expected": "进入确认页并显示待上传文件信息"
+        },
+        {
+          "title": "上传流程_确认页点击确认上传_上传完成_显示成功结果",
+          "source": "described",
+          "confidence": "high",
+          "priority": "P1",
+          "steps": ["在确认页核对文件信息", "点击确认上传按钮"],
+          "expected": "进入结果页并显示上传成功提示"
+        }
+      ]
+    },
+    {
+      "key": "interruption",
+      "title": "2. 流程中断",
+      "cases": [
+        {
+          "title": "上传流程_上传页点击取消_返回列表页_文件未上传",
+          "source": "described",
+          "confidence": "high",
+          "priority": "P2",
+          "steps": ["进入文件上传页", "点击取消按钮"],
+          "expected": "返回文件列表页且没有新增上传记录"
+        },
+        {
+          "title": "上传流程_确认页点击返回_返回上传页_已选文件保留",
+          "source": "described",
+          "confidence": "high",
+          "priority": "P2",
+          "steps": ["完成文件选择并进入确认页", "点击返回按钮"],
+          "expected": "返回上传页且已选文件信息保留"
+        }
+      ]
+    },
+    {
+      "key": "abnormal_navigation",
+      "title": "3. 页面跳转异常",
+      "cases": [
+        {
+          "title": "上传流程_直接访问确认页URL_无文件上下文_提示重新选择文件",
+          "source": "inferred",
+          "confidence": "medium",
+          "priority": "P1",
+          "assumptions": ["确认页需要上传上下文；直接访问 URL 时系统应阻止无效状态。"],
+          "steps": ["未选择文件时直接访问确认页 URL"],
+          "expected": "系统提示重新选择文件或返回上传页"
+        }
+      ]
+    },
+    {
+      "key": "state_consistency",
+      "title": "4. 状态与数据一致性",
+      "cases": [
+        {
+          "title": "上传流程_上传成功后返回列表页_刷新列表_新文件出现在列表",
+          "source": "inferred",
+          "confidence": "medium",
+          "priority": "P1",
+          "assumptions": ["上传成功后列表数据应与服务端状态一致，刷新不应丢失新记录。"],
+          "steps": ["完成文件上传", "返回文件列表页", "刷新列表"],
+          "expected": "新上传文件出现在文件列表中"
+        }
+      ]
+    },
+    {
+      "key": "duplicate_submit",
+      "title": "5. 重复提交并发防重",
+      "cases": [
+        {
+          "title": "上传流程_确认页快速重复点击确认上传_重复提交_只生成一条上传记录",
+          "source": "inferred",
+          "confidence": "medium",
+          "priority": "P0",
+          "assumptions": ["确认上传操作应具备幂等或按钮禁用机制，重复请求不能产生重复记录。"],
+          "steps": ["进入上传确认页", "快速多次点击确认上传按钮"],
+          "expected": "系统只生成一条上传记录"
+        }
+      ]
+    }
+  ]
+}

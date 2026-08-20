@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XMind 测试用例 Case Tree",
+  "type": "object",
+  "required": ["title"],
+  "additionalProperties": false,
+  "oneOf": [
+    {"required": ["scenarios"], "not": {"required": ["sheets"]}},
+    {"required": ["sheets"], "not": {"required": ["scenarios"]}}
+  ],
+  "properties": {
+    "title": {"type": "string", "minLength": 1},
+    "module": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+    "test_mode": {"type": "string", "enum": ["single_page", "cross_page"]},
+    "coverage_level": {
+      "type": "string",
+      "enum": ["minimal", "standard", "full"],
+      "default": "standard"
+    },
+    "focus_scenarios": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/scenarioKey"},
+      "uniqueItems": true
+    },
+    "target_xmind_version": {
+      "type": "string",
+      "enum": ["modern-json", "legacy-xml", "hybrid"],
+      "default": "modern-json"
+    },
+    "layout": {"type": "string", "enum": ["compact", "detailed"], "default": "detailed"},
+    "style": {"type": "string", "enum": ["plain", "professional"], "default": "professional"},
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/definitions/scenario"}
+    },
+    "sheets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["title", "scenarios"],
+        "additionalProperties": false,
+        "properties": {
+          "title": {"type": "string", "minLength": 1},
+          "scenarios": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"$ref": "#/definitions/scenario"}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "scenarioKey": {
+      "type": "string",
+      "enum": [
+        "main_flow",
+        "interruption",
+        "abnormal_navigation",
+        "state_consistency",
+        "duplicate_submit",
+        "basic_function",
+        "boundary",
+        "invalid_input",
+        "field_dependency",
+        "stability"
+      ]
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["title", "cases"],
+      "additionalProperties": false,
+      "properties": {
+        "key": {"$ref": "#/definitions/scenarioKey"},
+        "title": {"type": "string", "minLength": 1},
+        "cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/definitions/testCase"}
+        }
+      }
+    },
+    "step": {
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {
+          "type": "object",
+          "required": ["action"],
+          "additionalProperties": false,
+          "properties": {
+            "action": {"type": "string", "minLength": 1},
+            "expected": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "testData": {
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {
+          "type": "object",
+          "required": ["name", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "value": {"type": ["string", "number", "integer", "boolean"]}
+          }
+        }
+      ]
+    },
+    "testCase": {
+      "type": "object",
+      "required": ["title", "steps", "expected"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^TC-[A-Z0-9_-]+-[0-9]{3,}$"},
+        "title": {"type": "string", "minLength": 1},
+        "preconditions": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "test_data": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/testData"}
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/definitions/step"}
+        },
+        "expected": {"type": "string", "minLength": 1},
+        "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]},
+        "source": {"type": "string", "enum": ["visible", "described", "inferred"]},
+        "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+        "assumptions": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "notes": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"source": {"const": "inferred"}}, "required": ["source"]},
+          "then": {"required": ["assumptions"], "properties": {"assumptions": {"minItems": 1}}}
+        }
+      ]
+    }
+  }
+}

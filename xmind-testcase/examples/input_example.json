@@ -1,0 +1,14 @@
+{
+  "page_description": "文件上传页包含文件选择控件、上传按钮、取消按钮、文件类型提示和上传结果提示。",
+  "flow_name": "文件上传功能",
+  "flow_description": "根据文件上传页面说明设计单页面功能测试。",
+  "test_mode": "single_page",
+  "focus_scenarios": [
+    "basic_function",
+    "boundary",
+    "invalid_input",
+    "field_dependency"
+  ],
+  "coverage_level": "standard",
+  "output_path": "output/file-upload.xmind"
+}

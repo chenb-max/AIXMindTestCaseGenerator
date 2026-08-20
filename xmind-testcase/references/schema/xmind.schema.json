@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "现代 XMind content.json 基础结构",
+  "description": "兼容仓库内现代 XMind JSON 文件；topic 的 class 字段在部分客户端产物中可省略。",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "required": ["id", "class", "title", "rootTopic"],
+    "additionalProperties": true,
+    "properties": {
+      "id": {"type": "string", "minLength": 1},
+      "class": {"type": "string", "const": "sheet"},
+      "title": {"type": "string", "minLength": 1},
+      "rootTopic": {"$ref": "#/definitions/topic"}
+    }
+  },
+  "definitions": {
+    "topic": {
+      "type": "object",
+      "required": ["id", "title"],
+      "additionalProperties": true,
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "class": {"type": "string", "const": "topic"},
+        "title": {"type": "string", "minLength": 1},
+        "style": {"type": "object"},
+        "children": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "attached": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/topic"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

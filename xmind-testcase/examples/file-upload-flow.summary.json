@@ -1,0 +1,34 @@
+{
+  "xmind_file_path": "examples\\file-upload-flow.xmind",
+  "target_format": "modern-json",
+  "test_case_summary": {
+    "total_count": 8,
+    "sheet_count": 1,
+    "scenario_breakdown": {
+      "1. 主流程": 3,
+      "2. 流程中断": 2,
+      "3. 页面跳转异常": 1,
+      "4. 状态与数据一致性": 1,
+      "5. 重复提交并发防重": 1
+    },
+    "source_breakdown": {
+      "described": 5,
+      "inferred": 3
+    },
+    "priority_breakdown": {
+      "P1": 5,
+      "P2": 2,
+      "P0": 1
+    }
+  },
+  "warnings": [],
+  "assumptions": [
+    "上传成功后列表数据应与服务端状态一致，刷新不应丢失新记录。",
+    "确认上传操作应具备幂等或按钮禁用机制，重复请求不能产生重复记录。",
+    "确认页需要上传上下文；直接访问 URL 时系统应阻止无效状态。"
+  ],
+  "validation": {
+    "case_tree": "passed",
+    "xmind": "passed"
+  }
+}

@@ -1,0 +1,27 @@
+name: xmind-testcase
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install development dependencies
+        run: python -m pip install -r xmind-testcase/requirements-dev.txt
+      - name: Run tests
+        run: python -m pytest xmind-testcase/tests -v -p no:cacheprovider
+      - name: Validate checked-in examples
+        run: |
+          python -B xmind-testcase/scripts/validate_case_tree.py xmind-testcase/examples/case_tree_example.json
+          python -B xmind-testcase/scripts/validate_case_tree.py xmind-testcase/examples/multi-sheet-case-tree.json
+          python -B xmind-testcase/scripts/validate_input.py xmind-testcase/examples/input_example.json
+          python -B xmind-testcase/scripts/validate_xmind.py xmind-testcase/examples/file-upload-flow.xmind

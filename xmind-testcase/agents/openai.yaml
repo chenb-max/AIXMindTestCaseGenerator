@@ -1,0 +1,7 @@
+interface:
+  display_name: "XMind Test Cases"
+  short_description: "Validated, traceable XMind test cases"
+  default_prompt: "Use $xmind-testcase to generate a validated XMind test case file from screenshots, requirements, or a business flow."
+
+policy:
+  allow_implicit_invocation: true

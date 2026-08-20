@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XMind 测试用例生成输出",
+  "type": "object",
+  "required": ["xmind_file_path", "target_format", "test_case_summary", "validation"],
+  "additionalProperties": false,
+  "properties": {
+    "xmind_file_path": {"type": "string", "pattern": "^.*\\.xmind$"},
+    "target_format": {"type": "string", "enum": ["modern-json", "legacy-xml", "hybrid"]},
+    "test_case_summary": {
+      "type": "object",
+      "required": ["total_count", "sheet_count", "scenario_breakdown", "source_breakdown"],
+      "additionalProperties": false,
+      "properties": {
+        "total_count": {"type": "integer", "minimum": 1},
+        "sheet_count": {"type": "integer", "minimum": 1},
+        "scenario_breakdown": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "source_breakdown": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "priority_breakdown": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "validation": {
+      "type": "object",
+      "required": ["case_tree", "xmind"],
+      "additionalProperties": false,
+      "properties": {
+        "case_tree": {"type": "string", "enum": ["passed", "failed"]},
+        "xmind": {"type": "string", "enum": ["passed", "failed"]}
+      }
+    }
+  }
+}
