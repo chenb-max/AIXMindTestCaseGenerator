@@ -22,21 +22,17 @@ xmind-testcase/
 └── tests/                   # 自动化测试
 ```
 
-`evaluation/`、`AI_Xmind/` 和 `cases/` 是本地资料或生成内容，不随仓库分发。
+## 拉取与安装
 
-## 安装
+需要 Python 3.9+ 和支持 Agent Skills 的 Codex 客户端。
 
-环境要求：Python 3.9+，以及支持 Agent Skills 的 Codex CLI 或 IDE 客户端。
-
-```bash
+```powershell
+git clone https://github.com/chenb-max/AIXMindTestCaseGenerator.git
+cd AIXMindTestCaseGenerator
 python -m pip install -r xmind-testcase/requirements.txt
-```
-
-将 `xmind-testcase/` 复制到客户端的 Skill 目录，例如：
-
-```text
-Windows: %USERPROFILE%/.agents/skills/xmind-testcase
-macOS/Linux: ~/.agents/skills/xmind-testcase
+$skillPath = "$env:USERPROFILE\.agents\skills\xmind-testcase"
+New-Item -ItemType Directory -Force $skillPath | Out-Null
+Copy-Item .\xmind-testcase\* $skillPath -Recurse -Force
 ```
 
 安装后在 Codex 中调用 `$xmind-testcase`，提供需求、截图或流程，并指定输出路径。例如：
