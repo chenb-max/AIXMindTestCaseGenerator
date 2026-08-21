@@ -14,6 +14,6 @@ output.summary.json
 # Local evaluation data is not part of the distributable Skill.
 evaluation/
 
-# Keep only the Skill usage note from the local AI_Xmind notes.
-AI_Xmind/*
-!AI_Xmind/03-AI生成测试用例与XMind.md
+# Local notes and generated test cases are not part of the repository.
+AI_Xmind/
+cases/

@@ -22,7 +22,7 @@ xmind-testcase/
 └── tests/                   # 自动化测试
 ```
 
-`evaluation/` 是本地评测数据，不随仓库分发。`AI_Xmind/` 仅保留 Skill 使用说明。
+`evaluation/`、`AI_Xmind/` 和 `cases/` 是本地资料或生成内容，不随仓库分发。
 
 ## 安装
 
